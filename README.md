@@ -1,73 +1,92 @@
-# multi
+# Merge List Columns
 
-## Summary
+This SPFx web part merges SharePoint list columns from different lists in any site into a DetailsList component. According to the administrator's adjustments, only admins or users can configure this web part.
 
-Short summary on functionality and used technologies.
+## Contents
 
-[picture of the solution in action, if possible]
+- Installation
+- Add Web Part
+- Wep Part Configuration
+- Functionality
 
-## Used SharePoint Framework Version
+## Installation
+
+First, clone the project and open it in VS Code. In the terminal, run the following command:
+```bash
+  npm run finalBuild
+```
+![01](https://github.com/Shmata/MergeLists/assets/2398297/71c1466f-02a7-4662-9df5-f768f5c547c6)
+
+Second, navigate to the 'sharepoint\solution' folder to retrieve the 'multi.sppkg' solution package.
+![001](https://github.com/Shmata/MergeLists/assets/2398297/287e1194-f392-4856-8550-46a54a7b5b1a)
+
+Then, navigate to a SharePoint site appcatalog and deploy the 'multi.sppkg' solution to your appcatalog site. 
+Let’s call this site the destination site.
+
+![3](https://github.com/Shmata/MergeLists/assets/2398297/4759d53e-94f2-4d8e-9bad-0f05409af3e2)
+
+
+Now, go to the SharePoint Administration Center using this URL: `https://yourtenant-admin.sharepoint.com/_layouts/15/online/AdminHome.aspx#/home`. Since this solution will create a list in the destination site, and the Graph API needs permission to read all sites, it is required to approve an API access request. To do so, access the SharePoint Admin Center, click on `Advanced,` then `API access`. The `Sites.ReadWrite.All` permission is required. 
+
+Finally, select the APIs related to this solution and approve them, as shown in the screenshot below.
+
+![2](https://github.com/Shmata/MergeLists/assets/2398297/74b6de80-3332-47e0-b8b9-10e4f29249f7)
+
+## Add Web Part
+After installing the web part, it is ready to use. Navigate to SharePoint `Site contents` and create a page. You can then use this web part on any SharePoint pages. 
+Edit the page and add the `Merge` web part.
+
+![4](https://github.com/Shmata/MergeLists/assets/2398297/9a9285f0-ecdf-4e96-bb04-f33c52fcbf97)
+
+## Web Part Configuration 
+Once the web part is added to a page, a button will appear in the web part zone. If a site owner or administrator clicks that button, they can easily configure the web part. This button is available only for administrators. All queries will be logged in a SharePoint list, and based on the web part configuration, the administrator can decide who can see the result (Merged columns). Let's explore the different parts of the web part configuration.
+
+![5](https://github.com/Shmata/MergeLists/assets/2398297/d7f051a8-c4f6-4ccf-b820-cc21c50d8137)
+
+As shown in the screenshot above, there are two main parts in the configurations.
+   - Styling
+     - Description Field
+     - Button Alignment
+     - Button size
+
+       These three items are related to the style and appearance of the web part
+   - Visiblity Status
+     - Who can **see** this web part?
+     - Who can **edit** this web part?
+
+       Obviously, these two items are related to visibility and edit capability of the web part
+       
+ 
+## Functionality 
+
+![6](https://github.com/Shmata/MergeLists/assets/2398297/28d990d0-600e-4181-b6f7-4eacaf3d8f7b)
+
+When an administrator clicks on the main button of the web part, a Fluent UI panel is displayed. Within the panel, there are multi-select Fluent UI dropdown components that administrators can use to select sites, lists, and columns associated with those lists. Upon clicking the **Show grid** button, a Fluent UI DetailsList containing all the selected columns displays accumulated items. The web part provides the ability to filter items.
+
+Once an administrator configures everything and clicks on `Show grid`, all encoded queries will be recorded in the 'MergeLists' list, which is automatically created by the web part. This allows current site users to see the results without any problems.
+
+![7](https://github.com/Shmata/MergeLists/assets/2398297/85bd9253-adc5-4c6f-a66e-767f31464f54)
+
+## Used SharePoint 
+Framework Version
 
 ![version](https://img.shields.io/badge/version-1.17.4-green.svg)
 
-## Applies to
-
-- [SharePoint Framework](https://aka.ms/spfx)
-- [Microsoft 365 tenant](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/set-up-your-developer-tenant)
-
-> Get your own free development tenant by subscribing to [Microsoft 365 developer program](http://aka.ms/o365devprogram)
-
-## Prerequisites
-
-> Any special pre-requisites?
-
 ## Solution
 
-| Solution    | Author(s)                                               |
+| Solution    | Author                                               |
 | ----------- | ------------------------------------------------------- |
-| folder name | Author details (name, company, twitter alias with link) |
+| Multi.sppkg | Shahab Matapour |
 
 ## Version history
 
 | Version | Date             | Comments        |
 | ------- | ---------------- | --------------- |
-| 1.1     | March 10, 2021   | Update comment  |
-| 1.0     | January 29, 2021 | Initial release |
+| 1.0     | January 27, 2024 | Initial release |
+
 
 ## Disclaimer
 
 **THIS CODE IS PROVIDED _AS IS_ WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.**
 
 ---
-
-## Minimal Path to Awesome
-
-- Clone this repository
-- Ensure that you are at the solution folder
-- in the command-line run:
-  - **npm install**
-  - **gulp serve**
-
-> Include any additional steps as needed.
-
-## Features
-
-Description of the extension that expands upon high-level summary above.
-
-This extension illustrates the following concepts:
-
-- topic 1
-- topic 2
-- topic 3
-
-> Notice that better pictures and documentation will increase the sample usage and the value you are providing for others. Thanks for your submissions advance.
-
-> Share your web part with others through Microsoft 365 Patterns and Practices program to get visibility and exposure. More details on the community, open-source projects and other activities from http://aka.ms/m365pnp.
-
-## References
-
-- [Getting started with SharePoint Framework](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/set-up-your-developer-tenant)
-- [Building for Microsoft teams](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/build-for-teams-overview)
-- [Use Microsoft Graph in your solution](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/web-parts/get-started/using-microsoft-graph-apis)
-- [Publish SharePoint Framework applications to the Marketplace](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/publish-to-marketplace-overview)
-- [Microsoft 365 Patterns and Practices](https://aka.ms/m365pnp) - Guidance, tooling, samples and open-source controls for your Microsoft 365 development
