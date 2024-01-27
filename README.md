@@ -1,6 +1,6 @@
 # Merge List Columns
 
-This SPFx web part merges SharePoint list columns from different lists in any site into a DetailsList component. According to the administrator's adjustments, only admins or users can configure this web part.
+This SPFx web part merges SharePoint list columns from different lists in any site into a DetailsList component. According to the administrator's adjustments, either admins or users can configure this web part.
 
 ## Contents
 
