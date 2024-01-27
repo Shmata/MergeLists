@@ -1,0 +1,66 @@
+@import '~@fluentui/react/dist/sass/References.scss';
+
+.merge {
+  overflow: hidden;
+  padding: 1em;
+  color: "[theme:bodyText, default: #323130]";
+  color: var(--bodyText);
+  &.teams {
+    font-family: $ms-font-family-fallbacks;
+  }
+}
+
+.welcome {
+  text-align: center;
+}
+
+.welcomeImage {
+  width: 100%;
+  max-width: 420px;
+}
+
+.links {
+  a {
+    text-decoration: none;
+    color: "[theme:link, default:#03787c]";
+    color: var(--link); // note: CSS Custom Properties support is limited to modern browsers only
+
+    &:hover {
+      text-decoration: underline;
+      color: "[theme:linkHovered, default: #014446]";
+      color: var(--linkHovered); // note: CSS Custom Properties support is limited to modern browsers only
+    }
+  }
+}
+.button {
+  // Our button
+  text-decoration: none;
+  min-height: 32px;
+
+  // Primary Button
+  min-width: 80px;
+  background-color: $ms-color-themePrimary;
+  border-color: $ms-color-themePrimary;
+  color: $ms-color-white;
+
+  box-sizing: content-box;
+  // Basic Button
+  outline: transparent;
+  position: relative;
+  font-family: "Segoe UI WestEuropean","Segoe UI",-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-size: $ms-font-size-m;
+  font-weight: $ms-font-weight-regular;
+  border-width: 0;
+  text-align: center;
+  cursor: pointer;
+  display: inline-block;
+  padding: 0.5em 1em;
+  &:hover{
+    background-color: $ms-color-themeDark;
+  }
+}
+
+.savingText {
+  color: $ms-color-themePrimary;
+}

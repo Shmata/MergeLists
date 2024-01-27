@@ -1,0 +1,46 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "multi-client-side-solution",
+    "id": "d5cc73af-c6bb-4619-b311-49d9e152c7b5",
+    "version": "1.0.0.4",
+    "includeClientSideAssets": true,
+    "webApiPermissionRequests": [
+      {
+        "resource": "Microsoft Graph",
+        "scope": "Sites.ReadWrite.All"
+      }
+    ],
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "Shahab Matapour",
+      "websiteUrl": "http://www.matapour.pro",
+      "privacyUrl": "https://www.linkedin.com/in/shahabmatapour",
+      "termsOfUseUrl": "https://github.com/Shmata",
+      "mpnId": "Undefined-1.17.4"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "Merge columns from different lists into a DetailsList component"
+      },
+      "longDescription": {
+        "default": "This project will merge SharePoint list columns from different lists in any sites to a DetailsList component"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "multi Feature",
+        "description": "The feature that activates elements of the multi solution.",
+        "id": "5ab01b32-ff82-4536-a477-1438e40e80e5",
+        "version": "1.0.0.1"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/multi.sppkg"
+  }
+}
