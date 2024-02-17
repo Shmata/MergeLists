@@ -1,14 +1,8 @@
 import { IPropertyPaneDropdownOption } from '@microsoft/sp-property-pane';
 import { MSGraphClientV3 } from '@microsoft/sp-http';
-import { Dropdown, DropdownMenuItemType, IDropdownStyles, IDropdownOption } from '@fluentui/react/lib/Dropdown';
+import { DropdownMenuItemType, IDropdownOption } from '@fluentui/react/lib/Dropdown';
 import * as strings from 'MergeWebPartStrings';
 import { Utilities } from './Utilities';
-
-import { PermissionKind, hasPermissions } from '../models/IPermissions';
-import { PnPClientStorage } from '@pnp/common';
-import { TimelinePipe } from '@pnp/core';
-import { IWeb } from "@pnp/sp/presets/all";
-import { Caching } from "@pnp/queryable";
 
 export class GraphService {
 
@@ -93,21 +87,6 @@ export class GraphService {
     }
   }
 
-  public async checkCurrentUserPermissions(web: IWeb, listUrl: string, permission: PermissionKind): Promise<boolean> {
-    const storage = new PnPClientStorage();
-    return storage.local.getOrPut<boolean>(`CurrentUsersHas${permission.toString()}_${listUrl}`, () => {
-      return web.getList(listUrl).effectiveBasePermissions.using(this.getDefaultCachingBehavior())().then((result) => {
-        return hasPermissions(result, permission);
-      }).catch(() => {
-        return false;
-      });
-    }, new Date(new Date().getTime() + 5 * 60000));
-
-  }
-
-  public getDefaultCachingBehavior(): TimelinePipe<any> {
-    return Caching({ store: "session", expireFunc: (url: string) => { return new Date(Date.now() + 3600 * 1000); } });
-  }
 
   public async getColumns(siteId: string): Promise<any> {
     let listRequest = siteId.split('|');
@@ -170,12 +149,6 @@ export class GraphService {
     let selectedCols = this.utilities.convertStringArrayToString(columns);
     let res = await this.getListItems(siteId, listGUID, selectedCols);
     return res;
-  }
-
-  public async getSecondTestListItems(): Promise<any> {
-    let allItems = await this._graphClient.api(`/sites/5jsdrp.sharepoint.com,2c8b17c8-9798-457b-aad0-213b5475cbcb,186a48ff-ee1c-46ba-9e79-6b1f37563892/lists/25D5EA33-3AC6-41BD-9195-CD3AA7FCC100/items?expand=fields(select=Title,Id,Created,Author)`)
-      .get();
-    return allItems;
   }
 
 }
