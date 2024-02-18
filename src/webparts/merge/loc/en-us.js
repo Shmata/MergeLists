@@ -31,7 +31,7 @@ define([], function() {
     "ListFor":"Lists blong to:",
     "ColumnFor": "Columns belong to:",
     "ShowListData": "Show grid",
-    
+    "AccessDenied":"AccessDenied",
     // Merge
     "MergeSettings": "Solution settings",
     "CloseButtonText": "Close",
