@@ -51,6 +51,7 @@ declare interface IMergeWebPartStrings {
   FilterLabel: string;
   FilterTextboxPlaceholder: string;
   SelectColumn: string;
+  AccessDenied: string;
 }
 
 declare module 'MergeWebPartStrings' {
