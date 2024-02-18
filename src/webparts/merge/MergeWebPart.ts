@@ -15,6 +15,7 @@ import Merge from './components/Merge';
 import { IMergeProps } from '../../models/IMergeProps';
 import { SharePointServices } from '../../services/SharePointServices';
 import { Utilities } from '../../services/Utilities';
+import { PermissionKind, hasPermissions } from '../../models/IPermissions';
 
 export interface IMergeWebPartProps {
   buttonTitle: string;
@@ -29,6 +30,7 @@ export default class MergeWebPart extends BaseClientSideWebPart<IMergeWebPartPro
   private _themeVariant: IReadonlyTheme | undefined;
   private spservices: SharePointServices;
   private queryString: string;
+  private showSettings:  boolean;
   private utils : Utilities;
   constructor(){
     super();
@@ -62,7 +64,7 @@ export default class MergeWebPart extends BaseClientSideWebPart<IMergeWebPartPro
     // Register a handler to be notified if the theme variant changes
     this._themeProvider.themeChangedEvent.add(this, this._handleThemeChangedEvent);
     this.spservices = new SharePointServices(this.context);
-     this.spservices.checkIfListExistAndCreate().then();
+    this.spservices.checkIfListExistAndCreate().then();
     try{
       let query = await this.spservices.getLastQuery();
       if(!this.utils.isUndefinedNullOrEmpty(query))
@@ -71,7 +73,7 @@ export default class MergeWebPart extends BaseClientSideWebPart<IMergeWebPartPro
       this.queryString = "";
     }
     
-
+    this.checkSiteAdmin();
     return super.onInit();
   }
 
@@ -96,61 +98,86 @@ export default class MergeWebPart extends BaseClientSideWebPart<IMergeWebPartPro
     return Version.parse('1.0');
   }
 
+  protected checkSiteAdmin = () =>{
+    let apiUrl = `${this.context.pageContext.web.absoluteUrl}/_api/web/EffectiveBasePermissions`;
+    fetch(apiUrl, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json;odata=verbose',
+        'Content-Type': 'application/json;odata=verbose',
+      },
+    }).then(response => response.json()).then(data => {
+      const hasFullControlPermission = hasPermissions(data.d.EffectiveBasePermissions, PermissionKind.ManageWeb);
+      this.showSettings = hasFullControlPermission;
+    }).catch(error => {
+      console.log(error);
+    });
+
+  }
+
+
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
-    return {
-      pages: [
-        {
-          displayGroupsAsAccordion: true,
-          header: {
-            description: strings.PropertyPaneDescription
+    let webpartSettingGroups = [];
+    if(this.showSettings){
+      webpartSettingGroups.push({
+            groupName: strings.BasicGroupName,
+            isCollapsed: true,
+            groupFields: [
+              PropertyPaneTextField('buttonTitle', {
+                label: strings.DescriptionFieldLabel
+              }),
+              PropertyPaneChoiceGroup('buttonAlignment', {
+                label: strings.ButtonAlignment,
+                options: [
+                  { key: 'left', text: strings.ButtonAlignmentLeft },
+                  { key: 'center', text: strings.ButtonAlignmentCenter },
+                  { key: 'right', text: strings.ButtonAlignmentRight }
+                ],
+              }),
+              PropertyPaneSlider('buttonSize', {
+                label: strings.ButtonSize,
+                min: 10,
+                max: 64
+              })
+            ],
+            
           },
-          groups: [
-            {
-              groupName: strings.BasicGroupName,
-              isCollapsed: true,
-              groupFields: [
-                PropertyPaneTextField('buttonTitle', {
-                  label: strings.DescriptionFieldLabel
-                }),
-                PropertyPaneChoiceGroup('buttonAlignment', {
-                  label: strings.ButtonAlignment,
-                  options: [
-                    { key: 'left', text: strings.ButtonAlignmentLeft },
-                    { key: 'center', text: strings.ButtonAlignmentCenter },
-                    { key: 'right', text: strings.ButtonAlignmentRight }
-                  ],
-                }),
-                PropertyPaneSlider('buttonSize', {
-                  label: strings.ButtonSize,
-                  min: 10,
-                  max: 64
-                })
-              ],
-              
-            },
-            {
-              groupName: strings.VisibilityGroupName,
-              isCollapsed: true,
-              groupFields: [
-                PropertyPaneToggle('visibilityOpts', {
-                  key: 'visibilityToggle',
-                  checked: false,
-                  label: strings.WhoCanSee,
-                  onText: strings.Admins,
-                  offText: strings.Everyone
-                }),
-                PropertyPaneToggle('settingOpts', {
-                  key: 'settingToggle',
-                  checked: false,
-                  label: strings.WhoCanEdit,
-                  onText: strings.Admins,
-                  offText: strings.Everyone
-                })
-              ]
-            }            
-          ]
-        }
-      ]
+          {
+            groupName: strings.VisibilityGroupName,
+            isCollapsed: true,
+            groupFields: [
+              PropertyPaneToggle('visibilityOpts', {
+                key: 'visibilityToggle',
+                checked: false,
+                label: strings.WhoCanSee,
+                onText: strings.Admins,
+                offText: strings.Everyone
+              }),
+              PropertyPaneToggle('settingOpts', {
+                key: 'settingToggle',
+                checked: false,
+                label: strings.WhoCanEdit,
+                onText: strings.Admins,
+                offText: strings.Everyone
+              })
+            ]
+          }            
+      );
+    }else{
+      webpartSettingGroups.push({
+        groupName: strings.AccessDenied,
+            isCollapsed: true,
+            groupFields: []
+      });
+    }
+    return {
+      pages: [{
+        displayGroupsAsAccordion: true,
+        header: {
+          description: strings.PropertyPaneDescription
+        },
+        groups: webpartSettingGroups
+      }]
     };
   }
   
